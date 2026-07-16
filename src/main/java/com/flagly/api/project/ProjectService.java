@@ -4,6 +4,8 @@ import com.flagly.api.project.dto.ProjectResponse;
 import com.flagly.api.project.exceptions.ProjectNotFoundException;
 import com.flagly.api.project.dto.CreateProjectRequest;
 import com.flagly.api.project.mapper.ProjectMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,11 +30,9 @@ public class ProjectService {
         return ProjectMapper.toResponse(project);
     }
 
-    public List<ProjectResponse> getAllProjects() {
-        return projectRepository.findAll()
-                .stream()
-                .map(ProjectMapper::toResponse)
-                .toList();
+    public Page<ProjectResponse> getAllProjects(Pageable pageable) {
+        return projectRepository.findAll(pageable)
+                .map(ProjectMapper::toResponse);
     }
 
     public void deleteProjectById(Long id) {

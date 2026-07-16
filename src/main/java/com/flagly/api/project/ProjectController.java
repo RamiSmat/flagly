@@ -3,6 +3,8 @@ package com.flagly.api.project;
 import com.flagly.api.project.dto.ProjectResponse;
 import com.flagly.api.project.dto.CreateProjectRequest;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +27,8 @@ public class ProjectController {
         return projectService.getProjectById(id);
     }
     @GetMapping
-    public List<ProjectResponse> getAllProjects() {
-        return projectService.getAllProjects();
+    public Page<ProjectResponse> getAllProjects(Pageable pageable) {
+        return projectService.getAllProjects(pageable);
     }
     @DeleteMapping("/{id}")
     public void deleteProject(@PathVariable Long id){
