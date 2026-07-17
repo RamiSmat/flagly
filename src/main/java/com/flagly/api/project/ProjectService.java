@@ -1,5 +1,8 @@
 package com.flagly.api.project;
 
+import com.flagly.api.organization.Organization;
+import com.flagly.api.organization.OrganizationRepository;
+import com.flagly.api.organization.exceptions.OrganizationNotFoundException;
 import com.flagly.api.project.dto.ProjectResponse;
 import com.flagly.api.project.exceptions.ProjectNotFoundException;
 import com.flagly.api.project.dto.CreateProjectRequest;
@@ -13,12 +16,17 @@ import java.util.List;
 @Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
-
-    public ProjectService(ProjectRepository projectRepository) {
+    private final OrganizationRepository organizationRepository;
+    public ProjectService(ProjectRepository projectRepository, OrganizationRepository organizationRepository) {
         this.projectRepository = projectRepository;
+        this.organizationRepository = organizationRepository;
     }
-    public ProjectResponse createProject(CreateProjectRequest project) {
-        Project saved = projectRepository.save(ProjectMapper.toEntity(project));
+    public ProjectResponse createProject(CreateProjectRequest request) {
+        Organization organization = organizationRepository.findById(Long.valueOf(request.getOrganizationId()))
+                .orElseThrow(() -> new OrganizationNotFoundException(request.getOrganizationId()));
+        Project project = ProjectMapper.toEntity(request);
+        project.setOrganization(organization);
+        Project saved = projectRepository.save(project);
         return ProjectMapper.toResponse(saved);
 
 

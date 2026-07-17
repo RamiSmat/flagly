@@ -1,20 +1,24 @@
 package com.flagly.api.project;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.flagly.api.common.entity.BaseEntity;
+import com.flagly.api.organization.Organization;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-public class Project {
+public class Project extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="organization_id", nullable=false)
+    private Organization organization;
 
 }

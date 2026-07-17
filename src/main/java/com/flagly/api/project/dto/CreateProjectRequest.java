@@ -8,4 +8,6 @@ import lombok.Setter;
 public class CreateProjectRequest {
     @NotBlank(message = "Project name is required")
     private String name;
+    @NotBlank(message = "Organization ID is required")
+    private String organizationId;
 }
